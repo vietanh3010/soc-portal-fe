@@ -1,7 +1,8 @@
 import { lazy } from 'react';
 import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 
-const EsHomeModuleModule = lazy(() => import('@/pages/es-home/index'));
+const EsHomeModule = lazy(() => import('@/pages/es-home/index'));
+const MetricsModule = lazy(() => import('@/pages/metrics/index'));
 
 const routes: RouteObject[] = [
     {
@@ -15,7 +16,11 @@ const routes: RouteObject[] = [
             },
             {
                 path: 'es',
-                element: <EsHomeModuleModule/>,
+                element: <EsHomeModule/>,
+            },
+            {
+                path: 'metrics',
+                element: <MetricsModule/>,
             },
         ]
     }
