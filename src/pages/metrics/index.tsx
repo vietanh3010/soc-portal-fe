@@ -1,12 +1,11 @@
 import { memo } from "react"
-
-
+import { Button } from "@/components/ui/button"
 
 const Metrics = (): JSX.Element => {
 
 
     return (
-        <div>Metrics</div>
+        <Button>Metrics</Button>
     )
 }
 
