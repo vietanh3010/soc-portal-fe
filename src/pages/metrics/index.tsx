@@ -1,11 +1,19 @@
+import {
+    Card, CardContent, CardHeader
+} from "@/components/ui/card"
 import { memo } from "react"
-import { Button } from "@/components/ui/button"
-
+import MetricsForms from "./form-components/MetricsForms"
+  
 const Metrics = (): JSX.Element => {
-
+    
 
     return (
-        <Button>Metrics</Button>
+        <Card>
+            <CardHeader></CardHeader>
+            <CardContent>
+                <MetricsForms/>
+            </CardContent>
+        </Card>
     )
 }
 

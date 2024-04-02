@@ -8,30 +8,16 @@ import {
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 import { SearchDriverOptions } from "@elastic/search-ui";
 import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import Client from '@elastic/search-application-client'
 
 function getConfig(): any {
     return {
         "resultFields": [
-            "additional_urls",
-            "body_content",
-            "domains",
-            "headings",
-            "last_crawled_at",
-            "links",
-            "meta_description",
-            "meta_keywords",
-            "title",
-            "url",
-            "url_host",
-            "url_path",
-            "url_path_dir1",
-            "url_path_dir2",
-            "url_path_dir3",
-            "url_port",
-            "url_scheme",
-            "id"
+            "metric_0",
+            "metric_1",
+            "metric_2",
+            "timestamp",
           ],
         "sortFields": [
     
@@ -39,8 +25,6 @@ function getConfig(): any {
         "facets": [
     
         ],
-        "titleField": "title",
-        "urlField": "url"
     }
 }
 
@@ -145,7 +129,7 @@ function buildFacetConfigFromConfig() {
   }
 const connector = new AppSearchAPIConnector({
     searchKey: "search-koi766xvr7xupep6mqyxbgdq",
-    engineName: "test-es",
+    engineName: "search-metric",
     endpointBase: "https://soc-cmc.ent.asia-southeast1.gcp.elastic-cloud.com",
     
   });
@@ -199,7 +183,7 @@ const connector = new AppSearchAPIConnector({
 //     "search-koi766xvr7xupep6mqyxbgdq",
 //   )
 const EsHome = (): JSX.Element => {
-    
+    const refResult = useRef<any>();
 
     // useEffect(() => {
     //     async function test() {
@@ -212,6 +196,10 @@ const EsHome = (): JSX.Element => {
     //     }
     //     test();
     // }, [])
+
+    useEffect(() => {
+        setTimeout(() => console.log(refResult.current?.state.results), 1000)
+    }, [])
    
 
     return (
@@ -238,6 +226,7 @@ const EsHome = (): JSX.Element => {
                   }
                   bodyContent={
                     <Results
+                        ref={refResult}
                       titleField={getConfig().titleField}
                       urlField={getConfig().urlField}
                       thumbnailField={getConfig().thumbnailField}
