@@ -6,10 +6,8 @@ import {
     Layout
 } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
-import { SearchDriverOptions } from "@elastic/search-ui";
 import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
 import React, { memo, useEffect, useRef } from "react";
-import Client from '@elastic/search-application-client'
 
 function getConfig(): any {
     return {

@@ -8,9 +8,9 @@ const MainLayout = ({
 }: MainLayoutsProps): JSX.Element => {
 
     return (
-        <section className="p-5">
+        <div className="z-10 fixed inset-0 h-full w-full flex p-5 bg-slate-100">
             {children}
-        </section>
+        </div>
     )
 }
 

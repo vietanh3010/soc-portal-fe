@@ -3,6 +3,8 @@
 
 export class AppConfig {
     static ES = {
-        CONNECTION_ENDPOINT: import.meta.env.ES_CONNECTION_ENDPOINT,
+        ES_ENDPOINT_BASE: import.meta.env.VITE_APP_ES_ENDPOINT_BASE,
+        ES_ENGINE_NAME: import.meta.env.VITE_APP_ES_ENGINE_NAME,
+        ES_SEARCH_KEY: import.meta.env.VITE_APP_ES_SEARCH_KEY,
     }
 }
