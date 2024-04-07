@@ -11,3 +11,9 @@ export type CustomFormItem = {
             options: Array<{ label: string, value: string }>
         } & SelectProps
     )
+
+
+export type MetricForm = {
+    metric: string,
+    field: string,
+}

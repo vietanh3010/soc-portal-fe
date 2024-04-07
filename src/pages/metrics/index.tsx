@@ -13,19 +13,19 @@ const Metrics = (): JSX.Element => {
         <section className="h-full w-full grid grid-cols-1 gap-5 " style={{gridAutoRows: "1fr"}}>
             <Card className="overflow-auto h-full flex flex-col">
                 <CardHeader>
-                    <CardTitle>Chart</CardTitle>
+                    <CardTitle>Metric explorer</CardTitle>
                 </CardHeader>
-                <CardContent className="grow">
-                    <MetricChartContainer/>
+                <CardContent className="grow overflow-auto">
+                    <MetricsForms/>
                 </CardContent>
             </Card>
 
             <Card className="overflow-auto h-full flex flex-col">
                 <CardHeader>
-                    <CardTitle>Metric explorer</CardTitle>
+                    <CardTitle>Chart</CardTitle>
                 </CardHeader>
-                <CardContent className="grow overflow-auto">
-                    <MetricsForms/>
+                <CardContent className="grow">
+                    <MetricChartContainer/>
                 </CardContent>
             </Card>
         </section>

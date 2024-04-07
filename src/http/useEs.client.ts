@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const createBaseInstance = (): AxiosInstance => {
     const axiosInstance = axios.create({
-        baseURL: AppConfig.ES.ES_ENDPOINT_BASE
+        baseURL: `${AppConfig.ES.ENDPOINT_BASE}/${AppConfig.ES.INDEX}`
     });
     return axiosInstance;
 }
@@ -33,7 +33,7 @@ const useEsClient = (): ResultEsClient => {
         )
         axiosInstance.interceptors.request.use(
             (config) => {
-                // config.headers.Authorization = `Bearer ${localStorage.getItem(AppConfig.ACCESS_TOKEN) ?? ''}`;
+                config.headers.Authorization = `ApiKey ${AppConfig.ES.API_KEY}`;
                 return config;
             },
             (error) => {

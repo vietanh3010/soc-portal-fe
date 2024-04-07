@@ -32,6 +32,7 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "dayjs": "^1.11.10",
+        "echarts": "^5.5.0",
         "lodash": "^4.17.21",
         "perfect-scrollbar": "^1.5.5",
         "react": "^18.2.0",
@@ -41,7 +42,8 @@
         "tailwind-merge": "^2.2.2",
         "tailwindcss-animate": "^1.0.7",
         "vite-plugin-checker": "^0.6.4",
-        "zod": "^3.22.4"
+        "zod": "^3.22.4",
+        "zustand": "^4.5.2"
     },
     "devDependencies": {
         "@types/lodash": "^4.17.0",

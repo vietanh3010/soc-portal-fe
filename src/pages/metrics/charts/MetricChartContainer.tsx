@@ -1,72 +1,56 @@
 import ChartJs from "@/custom-components/charts/ChartJs";
-import useMetricService from "@/service-hooks/useMetric.service";
-import { useMutation } from "@tanstack/react-query";
+import useMetricsStore from "@/zustand/metrics.slice";
+import { ChartConfiguration } from "chart.js";
 import dayjs from "dayjs";
+import _ from "lodash";
 import { memo, useEffect, useState } from "react";
 
-const RESULT_FIELDS = [
-    "metric_0",
-    "metric_1",
-    "metric_2",
-    "timestamp",
-  ]
 
-function buildEsPayload() {
-    return {
-        page: { size: 50, current: 1}, // pagination
-        query: "", // query string,
-        result_fields: RESULT_FIELDS.reduce((p,c) => {
-            return {
-                ...p,
-                ...{[c]: {
-                    raw: {},
-                    snippet: {size: 100, fallback: true}
-                }}
-            }
-        },{})
-    }
-}
 const MetricChartContainer = (): JSX.Element => {
-    const { getData } = useMetricService();
-    const [barChartConfig, setBarChartConfig] = useState<any>(undefined);
-
-    const mutation = useMutation({
-        mutationFn: (payload: any) => getData(payload),
-        onSuccess: (response: any) => {
-            console.log(response)
-            const chartConfig = {
-                type: 'bar',
-                data: {
-                    labels: response.results.map((v: any) => dayjs(Number(v.timestamp.raw)).format("DD/MM/YYYY")),
-                    datasets: [{
-                        label: '#',
-                        data: response.results.map((v: any) => Number(v.metric_0.raw)),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            }
-            setBarChartConfig(chartConfig)
-        }
-    })
+    const [chartConfig, setChartConfig] = useState<any>(undefined);
+    const { requestResults } = useMetricsStore();
+   
 
     useEffect(() => {
-        mutation.mutateAsync(buildEsPayload())
-    }, [])
+        if(!requestResults) return;
+        const aggData = requestResults.aggregations.timestamp.buckets;
+        const fieldsList = Object.keys(_.omit(aggData[0], "key", "doc_count"))
+        const data = {
+            labels: aggData.map(v => dayjs(Number(v.key)).format("DD/MM/YYYY")),
+            datasets: fieldsList.map(field => ({
+                label: `${field}`,
+                data: aggData.map(d => _.get(d, field)?.value ?? 0),
+            }))
+        }
+        const chartConfig: ChartConfiguration = {
+            type: 'line',
+            data: data as any,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                    position: 'top',
+                    },
+                    title: {
+                    display: true,
+                    text: 'Line chart'
+                    }
+                }
+            },
+          };
+          setChartConfig(chartConfig)
+    }, [requestResults])
     
 
     return (
         <div className="h-full">
             <ChartJs
-                config={barChartConfig}/>
+                config={chartConfig}/>
         </div>
     )
 }

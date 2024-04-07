@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import {
@@ -7,11 +8,14 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { CustomFormItem } from "@/types/types";
+import useMetricService from "@/service-hooks/useMetric.service";
+import { EsResponse, RequestItem } from "@/types/response.type";
+import { CustomFormItem, MetricForm } from "@/types/types";
+import useMetricsStore from "@/zustand/metrics.slice";
 import { TrashIcon } from "@radix-ui/react-icons";
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
 import { memo } from "react";
-import { Controller, ControllerRenderProps, FieldValues, useFieldArray, useForm } from "react-hook-form";
+import { ControllerRenderProps, FieldValues, useFieldArray, useForm } from "react-hook-form";
 
 const METRICS_DEFINE = [
     {
@@ -34,24 +38,8 @@ const METRICS_DEFINE = [
 
 const FIELDS_DEFINE = [
     {
-        label: "Field 1",
-        value: "field1"
-    },
-    {
-        label: "Field 2",
-        value: "field2"
-    },
-    {
-        label: "Field 3",
-        value: "field3"
-    },
-    {
-        label: "Field 4",
-        value: "field4"
-    },
-    {
-        label: "Field 5",
-        value: "field5"
+        label: "value",
+        value: "value"
     },
 ]
 
@@ -72,16 +60,29 @@ const FORM_DEFINE: CustomFormItem[] = [
     }
 ]
 
-const ARRAY_FORM_NAME = "test"
+const ARRAY_FORM_NAME = "result";
+type FormType = {
+    [ARRAY_FORM_NAME]: MetricForm[]
+}
 const MetricsForms = (): JSX.Element => {
+    const { aggData } = useMetricService();
+    const { setRequestResults } = useMetricsStore();
     const form = useForm();
     const { fields, append, remove } = useFieldArray({
         control: form.control ,
         name: ARRAY_FORM_NAME,
     });
 
-    const onSubmit = (formValues: any) => {
-        console.log(formValues)
+    const mutation = useMutation({
+        mutationFn: (payload: MetricForm[]) => aggData(payload),
+        onSuccess: (response: EsResponse<RequestItem>) => {
+            setRequestResults(response);
+        }
+    })
+
+    const onSubmit = (formValues: FormType) => {
+        const body = formValues[ARRAY_FORM_NAME];
+        mutation.mutateAsync(body);
     }
 
     const renderItemByType = (formItem: CustomFormItem, field: ControllerRenderProps<FieldValues, string>) => {
@@ -91,7 +92,10 @@ const MetricsForms = (): JSX.Element => {
                     <FormItem>
                         <FormLabel>{formItem.label}</FormLabel>
                         <FormControl>
-                            <Select {...field}>
+                            <Select 
+                                {...field} 
+                                onValueChange={v => field.onChange(v)}
+                                >
                                 <SelectTrigger className="w-[180px]">
                                     <SelectValue placeholder={formItem.placeholder} />
                                 </SelectTrigger>
@@ -137,13 +141,13 @@ const MetricsForms = (): JSX.Element => {
                                         <FormField
                                             key={formItem.name}
                                             control={form.control}
-                                            name={`${ARRAY_FORM_NAME}.${i}.${formItem.name}`}
+                                            name={`${ARRAY_FORM_NAME}.${i}.${formItem.name}` as string}
                                             render={({field}) => {
-        
+
                                                 return (
-                                                    <FormItem>
+                                                    <>
                                                         {renderItemByType(formItem, field)}
-                                                    </FormItem>
+                                                    </>
                                                 )
                                             }}/>
                                     )
