@@ -8,7 +8,7 @@
         "start": "npm run start:dev",
         "start:dev": "vite --mode development --host",
         "start:prod": "vite --mode production --host",
-        "build": "npm run start:prod",
+        "build": "npm run build:prod",
         "build:dev": "tsc && vite build --mode development",
         "build:prod": "tsc && vite build --mode production",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
