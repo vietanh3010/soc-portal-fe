@@ -24,7 +24,6 @@ const useMetricService = (): ResultMetricService => {
     }
 
     const aggData = (payload: MetricForm[]): Promise<EsResponse<RequestItem>> => {
-        console.log(payload)
         const FIELD_NAME = "value";
         const aggDataBody = payload.reduce((p, c) => ({
             ...p,
