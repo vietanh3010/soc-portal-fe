@@ -34,7 +34,7 @@ const useEsClient = (): ResultEsClient => {
         )
         axiosInstance.interceptors.request.use(
             (config) => {
-                config.headers.Authorization = `ApiKey ${AppConfig.ES.API_KEY}`;
+                // config.headers.Authorization = `ApiKey ${AppConfig.ES.API_KEY}`;
                 return config;
             },
             (error) => {
