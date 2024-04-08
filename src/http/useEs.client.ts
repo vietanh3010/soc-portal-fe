@@ -4,7 +4,8 @@ import { useEffect } from "react";
 
 const createBaseInstance = (): AxiosInstance => {
     const axiosInstance = axios.create({
-        baseURL: `${AppConfig.ES.ENDPOINT_BASE}/${AppConfig.ES.INDEX}`
+        // baseURL: `${AppConfig.ES.ENDPOINT_BASE}/${AppConfig.ES.INDEX}`,
+        baseURL: `${AppConfig.ES.ENDPOINT_BASE}`
     });
     return axiosInstance;
 }
