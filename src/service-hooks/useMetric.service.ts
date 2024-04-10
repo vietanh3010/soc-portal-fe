@@ -1,3 +1,4 @@
+import { AppConfig } from "@/common/AppConfig";
 import useEsClient from "@/http/useEs.client";
 import { EsResponse, RequestItem } from "@/types/response.type";
 import { MetricForm } from "@/types/types";
@@ -6,6 +7,7 @@ import { RequestBody } from "@elastic/elasticsearch/lib/Transport";
 type ResultMetricService = {
     getAllData: (payload: MetricForm[]) => Promise<EsResponse<RequestItem>>,
     aggData: (payload: MetricForm[]) => Promise<EsResponse<RequestItem>>,
+    getFields: () => Promise<string[]>,
 }
 const useMetricService = (): ResultMetricService => {
     const esClient = useEsClient();
@@ -18,17 +20,16 @@ const useMetricService = (): ResultMetricService => {
             }
         }
         return esClient.post(
-            `/_search?pretty&size=100`,
+            AppConfig.ES.SEARCH,
             body,
         )
     }
 
     const aggData = (payload: MetricForm[]): Promise<EsResponse<RequestItem>> => {
-        const FIELD_NAME = "value";
         const aggDataBody = payload.reduce((p, c) => ({
             ...p,
-            [`${c.metric}_${FIELD_NAME}`]: {
-                [c.metric]: { field: FIELD_NAME }
+            [`${c.aggregation}:${c.field}`]: {
+                [c.aggregation]: { field: c.field }
             }
         }), {})
         const body: RequestBody = {
@@ -45,14 +46,20 @@ const useMetricService = (): ResultMetricService => {
             }
         }
         return esClient.post(
-            `/_search?pretty`,
+            AppConfig.ES.SEARCH,
             body,
         )
+    }
+
+    const getFields = (): Promise<string[]> => {
+
+        return esClient.get(AppConfig.ES.GET_FIELDS);
     }
 
     return {
         getAllData,
         aggData,
+        getFields
     }
 }
 

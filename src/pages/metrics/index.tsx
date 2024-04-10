@@ -10,7 +10,7 @@ const Metrics = (): JSX.Element => {
     
 
     return (
-        <section className="h-full w-full grid grid-cols-1 gap-5 " style={{gridAutoRows: "1fr"}}>
+        <section className="h-full w-full grid grid-cols-1 gap-3 lg:gap-5 " style={{gridAutoRows: "1fr"}}>
             <Card className="overflow-auto h-full flex flex-col">
                 <CardHeader>
                     <CardTitle>Metric explorer</CardTitle>

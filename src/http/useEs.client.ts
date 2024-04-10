@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const createBaseInstance = (): AxiosInstance => {
     const axiosInstance = axios.create({
         // baseURL: `${AppConfig.ES.ENDPOINT_BASE}/${AppConfig.ES.INDEX}`,
-        baseURL: `${AppConfig.ES.ENDPOINT_BASE}`
+        baseURL: `${AppConfig.ES_CREDENTIAL.ENDPOINT_BASE}`
     });
     return axiosInstance;
 }
@@ -26,16 +26,17 @@ const useEsClient = (): ResultEsClient => {
         // auth
         axiosInstance.interceptors.response.use(
             (response) => {
-                return response.data;
+                return response?.data;
             },
             (error) => {
+                console.error(error)
                 return Promise.reject(error);
             },
         )
         axiosInstance.interceptors.request.use(
             (config) => {
-                if (AppConfig.ES.API_KEY) {
-                    config.headers.Authorization = `ApiKey ${AppConfig.ES.API_KEY}`;
+                if (AppConfig.ES_CREDENTIAL.API_KEY) {
+                    config.headers.Authorization = `ApiKey ${AppConfig.ES_CREDENTIAL.API_KEY}`;
                 }
                 return config;
             },

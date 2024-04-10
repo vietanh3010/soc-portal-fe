@@ -1,9 +1,9 @@
 import { SelectProps } from "@radix-ui/react-select";
 
-
-export type CustomFormItem = {
-    name: string,
-    label: React.ReactNode,
+export type Lang = 'en' | 'vi';
+export type CustomFormItem<T> = {
+    name: keyof T,
+    label: string,
 } & (
         {
             type: "select",
@@ -14,6 +14,6 @@ export type CustomFormItem = {
 
 
 export type MetricForm = {
-    metric: string,
+    aggregation: string,
     field: string,
 }
